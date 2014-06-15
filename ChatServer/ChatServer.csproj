@@ -54,7 +54,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Client.cs" />
+    <Compile Include="NetworkEventArgs\ErrorEventArgs.cs" />
     <Compile Include="NetworkEventArgs\MessageRecievedEventArgs.cs" />
+    <Compile Include="NetworkEventArgs\ServerErrorEventArgs.cs" />
     <Compile Include="NetworkEventArgs\UserJoinedEventArgs.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="User.cs" />
