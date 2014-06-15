@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace ChatServer
+namespace ChatServer.NetworkEventArgs
 {
     public class UserJoinedEventArgs : EventArgs
     {
-        public User User { get; set; }
+        public Client User { get; set; }
     
     }
 }
