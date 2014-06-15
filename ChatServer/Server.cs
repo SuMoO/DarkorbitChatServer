@@ -33,6 +33,7 @@ namespace ChatServer
         {
             m_gamedatabase.TryConnect("localhost", "root", "", "skyuniverse");
             m_listener = new TcpListener(IPAddress.Any, 9338);
+            m_listener.Start();
             m_running = true;
             m_acceptThread = new Thread(Accept);
             m_acceptThread.Start();
@@ -50,6 +51,7 @@ namespace ChatServer
                 RaiseEvent(OnServerError,
                     new ServerErrorEventArgs {Error = ex, Message = "Error while trying to stop the server."});
             }
+            m_listener.Stop();
         }
 
         public bool IsBanned(Client c)

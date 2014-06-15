@@ -179,7 +179,8 @@ namespace ChatServer
                         }
 
                         m_server.Users.Add(UserId, this);
-                        
+                        RaiseEvent(OnUserJoin, new UserJoinedEventArgs{User = this});
+                        // TODO SEND CHAT ROOMS
                     }
                 }
                 catch (Exception ex)

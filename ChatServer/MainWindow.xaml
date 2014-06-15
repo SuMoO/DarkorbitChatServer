@@ -21,10 +21,10 @@
     		<ListView x:Name="lvUsers" Height="479">
     			<ListView.View>
     				<GridView>
-    					<GridViewColumn Header="Name" Width="150"/>
-    					<GridViewColumn Header="ClanTag" Width="100"/>
-    					<GridViewColumn Header="User ID" Width="75"/>
-    					<GridViewColumn Header="Session ID" Width="200"/>
+    					<GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Name}"/>
+    					<GridViewColumn Header="ClanTag" Width="100" DisplayMemberBinding="{Binding ClanTag}"/>
+    					<GridViewColumn Header="User ID" Width="75" DisplayMemberBinding="{Binding UserId}"/>
+    					<GridViewColumn Header="Session ID" Width="200" DisplayMemberBinding="{Binding SessionId}"/>
     				</GridView>
     			</ListView.View>
                 <ListView.ContextMenu>
@@ -43,8 +43,8 @@
     		</ListView>
     	</StackPanel>
     	<StackPanel HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="507" Margin="0,310,0,0">
-    		<Button x:Name="cmdStart" Content="Start Server" ToolTip="Starts the Chat Server on port 9338"/>
-    		<Button x:Name="cmdStop" Content="Stop Server" ToolTip="Trys to stop the server"/>
+    		<Button x:Name="cmdStart" Content="Start Server" ToolTip="Starts the Chat Server on port 9338" Click="cmdStart_Click"/>
+    		<Button x:Name="cmdStop" Content="Stop Server" ToolTip="Trys to stop the server" Click="cmdStop_Click"/>
     		<TextBlock TextWrapping="Wrap" Text="Server made by C0untLizzi"/>
     	</StackPanel>
         
