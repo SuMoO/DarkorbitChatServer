@@ -43,6 +43,19 @@ namespace ChatServer
             AbortThread(m_handlePacketThread);
         }
 
+        public void RawSend(string data)
+        {
+            try
+            {
+                var buffer = Encoding.Default.GetBytes(data);
+                m_tcpClient.GetStream().Write(buffer, 0, buffer.Length);
+            }
+            catch (Exception ex)
+            {
+                RaiseEvent(OnError, new ErrorEventArgs{Error = ex, Message = "Error while sending data.", User = this});
+            }
+        }
+
         protected virtual void RaiseEvent<T>(EventHandler<T> handler, T args)
         {
             if (handler != null)
@@ -60,19 +73,6 @@ namespace ChatServer
             catch (Exception ex)
             {
                 RaiseEvent(OnError, new ErrorEventArgs{Error = ex, Message = "Error while aborting thread", User = this});
-            }
-        }
-
-        public void RawSend(string data)
-        {
-            try
-            {
-                var buffer = Encoding.Default.GetBytes(data);
-                m_tcpClient.GetStream().Write(buffer, 0, buffer.Length);
-            }
-            catch (Exception ex)
-            {
-                RaiseEvent(OnError, new ErrorEventArgs{Error = ex, Message = "Error while sending data.", User = this});
             }
         }
 
