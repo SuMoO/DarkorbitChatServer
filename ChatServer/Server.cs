@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using ChatServer.MySql;
 using ChatServer.NetworkEventArgs;
 
 namespace ChatServer
@@ -13,6 +14,7 @@ namespace ChatServer
         private bool m_running;
         private Thread m_acceptThread;
         private TcpListener m_listener;
+        private Gamedatabase m_gamedatabase;
 
         public event EventHandler<ErrorEventArgs> OnClientError;
         public event EventHandler<MessageRecievedEventArgs> OnMessage;
@@ -24,10 +26,12 @@ namespace ChatServer
         public Server()
         {
             m_clients = new Dictionary<string, Client>();
+            m_gamedatabase = new Gamedatabase();
         }
 
         public void Start()
         {
+            m_gamedatabase.TryConnect("localhost", "root", "", "skyuniverse");
             m_listener = new TcpListener(IPAddress.Any, 9338);
             m_running = true;
             m_acceptThread = new Thread(Accept);
@@ -51,7 +55,20 @@ namespace ChatServer
         public bool IsBanned(Client c)
         {
             //TODO IMPLEMENT DATABASE
-            return false;
+            return m_gamedatabase.Banned(c.User);
+        }
+
+        public bool Valid(User user)
+        {
+            var realData = m_gamedatabase.GetUserData(user);
+
+            if (realData == null)
+                return false;
+
+            return user.UserId == realData.UserId &&
+                   user.SessionId == realData.SessionId &&
+                   user.ClanTag == realData.ClanTag &&
+                   user.Name == realData.Name;
         }
 
         private void Accept()

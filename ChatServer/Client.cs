@@ -158,6 +158,12 @@ namespace ChatServer
                         SessionId = parameters[4];
                         UserId = parameters[3];
 
+                        if (!m_server.Valid(User))
+                        {
+                            Disconnect();
+                            return;
+                        }
+
                         if (m_server.IsBanned(this))
                         {
                             Disconnect();
@@ -173,7 +179,7 @@ namespace ChatServer
                         }
 
                         m_server.Users.Add(UserId, this);
-                        // Rest will come soon when i finished database...
+                        
                     }
                 }
                 catch (Exception ex)
