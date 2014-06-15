@@ -23,6 +23,7 @@ namespace ChatServer
         public Client(TcpClient client)
         {
             m_tcpClient = client;
+            m_packetQueue = new Queue<string>();
         }
 
         public void Start()

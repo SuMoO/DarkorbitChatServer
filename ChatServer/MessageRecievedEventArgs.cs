@@ -1,11 +1,7 @@
-﻿using System;
-
-namespace ChatServer
+﻿namespace ChatServer
 {
-    public class MessageRecievedEventArgs : EventArgs
+    class MessageRecievedEventArgs
     {
-        public User Sender { get; set; }
-
-        public string Message { get; set; }
+        // WTF IS THIS IN HERE
     }
 }
