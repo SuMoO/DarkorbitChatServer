@@ -5,6 +5,16 @@
     <Grid>
     	<StackPanel HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="507">
             <RichTextBox x:Name="rtbChatLog" Height="310" Background="Black" Foreground="Red" IsReadOnly="True">
+                <RichTextBox.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="clearMessageLog" Header="Clear">
+                            
+                        </MenuItem>
+                        <MenuItem Command="Copy">
+                            
+                        </MenuItem>
+                    </ContextMenu>
+                </RichTextBox.ContextMenu>
             </RichTextBox>
     	</StackPanel>
     	<StackPanel HorizontalAlignment="Left" Height="479" VerticalAlignment="Top" Width="533" RenderTransformOrigin="0.5,0.52" Margin="507,0,0,0">
@@ -17,6 +27,19 @@
     					<GridViewColumn Header="Session ID" Width="200"/>
     				</GridView>
     			</ListView.View>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="lvUsersKick" Header="Kick">
+                            
+                        </MenuItem>
+                        <MenuItem Name="lvUsersBan" Header="Ban">
+                            
+                        </MenuItem>
+                        <MenuItem Name="lvUsersUnban" Header="Unban">
+                            
+                        </MenuItem>
+                    </ContextMenu>
+                </ListView.ContextMenu>
     		</ListView>
     	</StackPanel>
     	<StackPanel HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="507" Margin="0,310,0,0">
