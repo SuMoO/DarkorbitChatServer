@@ -9,7 +9,7 @@ namespace ChatServer
 {
     public class Server
     {
-        private readonly List<Client> m_clients;
+        private readonly Dictionary<string, Client> m_clients;
         private bool m_running;
         private Thread m_acceptThread;
         private TcpListener m_listener;
@@ -19,9 +19,11 @@ namespace ChatServer
         public event EventHandler<UserJoinedEventArgs> OnUserJoin;
         public event EventHandler<ServerErrorEventArgs> OnServerError;
 
+        public Dictionary<string, Client> Users { get { return m_clients; } } 
+
         public Server()
         {
-            m_clients = new List<Client>();
+            m_clients = new Dictionary<string, Client>();
         }
 
         public void Start()
@@ -46,14 +48,27 @@ namespace ChatServer
             }
         }
 
+        public bool IsBanned(Client c)
+        {
+            //TODO IMPLEMENT DATABASE
+            return false;
+        }
+
         private void Accept()
         {
             while (m_running)
             {
-                var accpetedClient = m_listener.AcceptTcpClient();
-                var user = new Client(accpetedClient);
-                AddHandlers(user);
-                m_clients.Add(user);
+                try
+                {
+                    var accpetedClient = m_listener.AcceptTcpClient();
+                    var user = new Client(accpetedClient, this);
+                    AddHandlers(user);
+                    user.Start();
+                }
+                catch (Exception ex)
+                {
+                    RaiseEvent(OnServerError, new ServerErrorEventArgs{Error = ex, Message = "Error while acepting new client"});
+                }
             }
         }
 

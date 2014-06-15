@@ -5,6 +5,6 @@
         public string Name { get; set; }
         public string ClanTag { get; set; }
         public string SessionId { get; set; }
-        public long UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
