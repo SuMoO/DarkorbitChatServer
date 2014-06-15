@@ -14,7 +14,7 @@ namespace ChatServer
         private bool m_running;
         private Thread m_acceptThread;
         private TcpListener m_listener;
-        private Gamedatabase m_gamedatabase;
+        private readonly Gamedatabase m_gamedatabase;
 
         public event EventHandler<ErrorEventArgs> OnClientError;
         public event EventHandler<MessageRecievedEventArgs> OnMessage;
@@ -42,6 +42,10 @@ namespace ChatServer
         public void Stop()
         {
             m_running = false;
+            foreach (var client in m_clients)
+            {
+                client.Value.Disconnect();
+            }
             try
             {
                 m_acceptThread.Abort();
@@ -56,7 +60,6 @@ namespace ChatServer
 
         public bool IsBanned(Client c)
         {
-            //TODO IMPLEMENT DATABASE
             return m_gamedatabase.Banned(c.User);
         }
 
