@@ -29,13 +29,13 @@
     			</ListView.View>
                 <ListView.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Name="lvUsersKick" Header="Kick">
+                        <MenuItem Name="lvUsersKick" Header="Kick" ToolTip="Kicks all the selected players from the server.">
                             
                         </MenuItem>
-                        <MenuItem Name="lvUsersBan" Header="Ban">
+                        <MenuItem Name="lvUsersBan" Header="Ban" ToolTip="Bans all the selected players from the server.">
                             
                         </MenuItem>
-                        <MenuItem Name="lvUsersUnban" Header="Unban">
+                        <MenuItem Name="lvUsersUnban" Header="Unban" ToolTip="Unbans the selcted players.">
                             
                         </MenuItem>
                     </ContextMenu>
@@ -45,6 +45,7 @@
     	<StackPanel HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="507" Margin="0,310,0,0">
     		<Button x:Name="cmdStart" Content="Start Server" ToolTip="Starts the Chat Server on port 9338"/>
     		<Button x:Name="cmdStop" Content="Stop Server" ToolTip="Trys to stop the server"/>
+    		<TextBlock TextWrapping="Wrap" Text="Server made by C0untLizzi"/>
     	</StackPanel>
         
     </Grid>
