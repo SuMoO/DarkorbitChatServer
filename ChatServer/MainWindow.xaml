@@ -1,8 +1,28 @@
 ﻿<Window x:Class="ChatServer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Control Panel" Height="519" Width="1048">
     <Grid>
+    	<StackPanel HorizontalAlignment="Left" Height="310" VerticalAlignment="Top" Width="507">
+            <RichTextBox x:Name="rtbChatLog" Height="310" Background="Black" Foreground="Red" IsReadOnly="True">
+            </RichTextBox>
+    	</StackPanel>
+    	<StackPanel HorizontalAlignment="Left" Height="479" VerticalAlignment="Top" Width="533" RenderTransformOrigin="0.5,0.52" Margin="507,0,0,0">
+    		<ListView x:Name="lvUsers" Height="479">
+    			<ListView.View>
+    				<GridView>
+    					<GridViewColumn Header="Name" Width="150"/>
+    					<GridViewColumn Header="ClanTag" Width="100"/>
+    					<GridViewColumn Header="User ID" Width="75"/>
+    					<GridViewColumn Header="Session ID" Width="200"/>
+    				</GridView>
+    			</ListView.View>
+    		</ListView>
+    	</StackPanel>
+    	<StackPanel HorizontalAlignment="Left" Height="169" VerticalAlignment="Top" Width="507" Margin="0,310,0,0">
+    		<Button x:Name="cmdStart" Content="Start Server" ToolTip="Starts the Chat Server on port 9338"/>
+    		<Button x:Name="cmdStop" Content="Stop Server" ToolTip="Trys to stop the server"/>
+    	</StackPanel>
         
     </Grid>
 </Window>
