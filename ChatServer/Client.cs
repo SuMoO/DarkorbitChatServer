@@ -22,18 +22,25 @@ namespace ChatServer
 
         public Client(TcpClient client)
         {
-            m_running = true;
             m_tcpClient = client;
         }
 
         public void Start()
         {
-            
+            m_running = true;
+
+            m_handlePacketThread = new Thread(HandlePackets) {IsBackground = true};
+            m_handlePacketThread.Start();
+
+            m_recieveThread = new Thread(Recieve) {IsBackground = true};
+            m_recieveThread.Start();
         }
 
         public void Disconnect()
         {
             m_running = false;
+            AbortThread(m_recieveThread);
+            AbortThread(m_handlePacketThread);
         }
 
         protected virtual void RaiseEvent<T>(EventHandler<T> handler, T args)
@@ -44,7 +51,19 @@ namespace ChatServer
             }
         }
 
-        private void Send(string data)
+        protected virtual void AbortThread(Thread t)
+        {
+            try
+            {
+                t.Abort();
+            }
+            catch (Exception ex)
+            {
+                RaiseEvent(OnError, new ErrorEventArgs{Error = ex, Message = "Error while aborting thread", User = this});
+            }
+        }
+
+        public void RawSend(string data)
         {
             try
             {
@@ -53,7 +72,26 @@ namespace ChatServer
             }
             catch (Exception ex)
             {
-                
+                RaiseEvent(OnError, new ErrorEventArgs{Error = ex, Message = "Error while sending data.", User = this});
+            }
+        }
+
+        private void HandlePackets()
+        {
+            while (m_running)
+            {
+                if (m_packetQueue.Count == 0)
+                {
+                    Thread.Sleep(250);
+                    continue;
+                }
+
+                var packet = m_packetQueue.Dequeue();
+
+                if (packet.StartsWith("<policy-file-request/>"))
+                {
+                    RawSend("<?xml version=\"1.0\"?><cross-domain-policy xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"http://www.adobe.com/xml/schemas/PolicyFileSocket.xsd\"><allow-access-from domain=\"*\" to-ports=\"*\" secure=\"false\" /><site-control permitted-cross-domain-policies=\"master-only\" /></cross-domain-policy>");
+                }
             }
         }
 
@@ -67,13 +105,18 @@ namespace ChatServer
 
                     var bytesRead = m_tcpClient.GetStream().Read(buffer, 0, buffer.Length);
 
+                    // If there was actual data being send
                     if (bytesRead > 0)
                     {
                         Array.Resize(ref buffer, bytesRead);
 
                         var packet = Encoding.Default.GetString(buffer);
 
-                        m_packetQueue.Enqueue(packet);
+                        // If the string is not null not empty and not whitespace
+                        if (!string.IsNullOrEmpty(packet) && packet.Trim() != "")
+                        {
+                            m_packetQueue.Enqueue(packet);
+                        }
                     }
                 }
                 catch (Exception ex)
