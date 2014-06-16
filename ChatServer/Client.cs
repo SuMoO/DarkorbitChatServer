@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -15,7 +16,8 @@ namespace ChatServer
         private Thread m_recieveThread;
         private Thread m_handlePacketThread;
         private Queue<string> m_packetQueue;
-        private static Server m_server = null;
+        private List<string> m_joinedChats; 
+        private static Server m_server;
         public User User { get; private set; }
 
         #region Wrapper For User
@@ -57,6 +59,7 @@ namespace ChatServer
                 m_server = s;
             }
             m_packetQueue = new Queue<string>();
+            m_joinedChats = new List<string>();
         }
 
         public void Start()
@@ -132,6 +135,11 @@ namespace ChatServer
             }
         }
 
+        private void SendChatRooms(string rooms)
+        {
+            RawSend("by%" + rooms + "#");
+        }
+
         private void HandlePackets()
         {
             while (m_running)
@@ -185,7 +193,9 @@ namespace ChatServer
 
                         m_server.Users.Add(UserId, this);
                         RaiseEvent(OnUserJoin, new UserJoinedEventArgs{User = this});
-                        // TODO SEND CHAT ROOMS
+                        var chatRooms = m_server.ChatRooms.Aggregate("", (current, room) => current + room);
+                        m_joinedChats.Add(m_server.ChatRooms.FirstOrDefault().Key);
+
                     }
                 }
                 catch (Exception ex)

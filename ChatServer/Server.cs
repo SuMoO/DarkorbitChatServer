@@ -11,7 +11,7 @@ namespace ChatServer
     public class Server
     {
         private readonly Dictionary<string, Client> m_clients;
-        
+        private readonly Dictionary<string, string> m_chatRooms; 
         private bool m_running;
         private Thread m_acceptThread;
         private TcpListener m_listener;
@@ -22,11 +22,15 @@ namespace ChatServer
         public event EventHandler<UserJoinedEventArgs> OnUserJoin;
         public event EventHandler<ServerErrorEventArgs> OnServerError;
 
-        public Dictionary<string, Client> Users { get { return m_clients; } } 
+        public Dictionary<string, Client> Users { get { return m_clients; } }
+        public Dictionary<string, string> ChatRooms { get { return m_chatRooms; } } 
 
         public Server()
         {
             m_clients = new Dictionary<string, Client>();
+            m_chatRooms = new Dictionary<string, string>();
+            m_chatRooms.Add("250", "{250|Global|0|-1|0|0}}");
+            m_chatRooms.Add("251", "{251|Bla|0|-1|0|0}}");
             m_gamedatabase = new Gamedatabase();
         }
 
