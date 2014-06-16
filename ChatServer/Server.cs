@@ -11,6 +11,7 @@ namespace ChatServer
     public class Server
     {
         private readonly Dictionary<string, Client> m_clients;
+        
         private bool m_running;
         private Thread m_acceptThread;
         private TcpListener m_listener;
@@ -74,6 +75,11 @@ namespace ChatServer
                    user.SessionId == realData.SessionId &&
                    user.ClanTag == realData.ClanTag &&
                    user.Name == realData.Name;
+        }
+
+        public bool IsAdmin(Client c)
+        {
+            return m_gamedatabase.Admin(c.User);
         }
 
         private void Accept()

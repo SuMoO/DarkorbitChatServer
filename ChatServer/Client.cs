@@ -15,7 +15,7 @@ namespace ChatServer
         private Thread m_recieveThread;
         private Thread m_handlePacketThread;
         private Queue<string> m_packetQueue;
-        private Server m_server;
+        private static Server m_server = null;
         public User User { get; private set; }
 
         #region Wrapper For User
@@ -50,7 +50,12 @@ namespace ChatServer
         public Client(TcpClient client, Server s)
         {
             m_tcpClient = client;
-            m_server = s;
+
+            // There is no need for every client to have their own server + set it every time on .ctor()
+            if (m_server == null)
+            {
+                m_server = s;
+            }
             m_packetQueue = new Queue<string>();
         }
 
